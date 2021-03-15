@@ -1,5 +1,5 @@
 # interactiveQRS
-A semi-automatic QRS detection algorithm in MATLAB. More generally, a way of interactively mark points in a signal through a moving window.
+A semi-automatic QRS detection algorithm in MATLAB. More generally, a way to interactively mark points in a signal through a moving window.
 
 To use it, either call main.m as:
 - main(EEG, [])
