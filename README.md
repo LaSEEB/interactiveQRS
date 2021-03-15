@@ -2,9 +2,9 @@
 A semi-automatic QRS detection algorithm in MATLAB
 
 To use it, either call main.m as:
-main(EEG, [])
-main(EEG, heart_rate)
-main(EEG, starter_marker_lats)
+- main(EEG, [])
+- main(EEG, heart_rate)
+- main(EEG, starter_marker_lats)
 
 , with EEG being a EEGLAB struct containing the ECG signal in EEG.data(32,:). The second argument provides an heart rate (that will determine window width) or an array of previously marked positions (latencies) (perhaps automatically, e.g. w/ EEGLAB's pop_fmrib_qrsdetect) to calculate it. 
 If it's empty, these positions must already be in EEG.event under the name 'QRS'. 
