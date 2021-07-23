@@ -3,7 +3,7 @@ A semi-automatic QRS detection algorithm in MATLAB. More generally, a way to int
 
 To use it, either call interactiveQRS.m as:
 - interactiveQRS(data, markers)
-- interactiveQRS(data, heart_rate, window_width)
+- interactiveQRS(data, heart_rate)
 - interactiveQRS(data, _, window_width, snap)
 
 The first argument is either a EEGLAB struct containing the ECG signal under the channel name "ECG"/"EKG", or a cell containing the ECG (vector) and its sampling frequency (scalar).
