@@ -16,11 +16,11 @@ if isstruct(data)
     EEG = data;
     srate = EEG.srate;
     times = EEG.times/1000;
-    data = EEG.data(ismember(upper({EEG.chanlocs(:).labels}),{'ECG','EKG'}),:);
+    ecg = EEG.data(ismember(upper({EEG.chanlocs(:).labels}),{'ECG','EKG'}),:);
 elseif iscell(data)
+    ecg = data{1};
     srate = data{2};
-    data = data{1};
-    times = 0:numel(data)/srate;
+    times = (0:numel(ecg)-1)/srate;
 end
 
 % Markers | heart rate
@@ -78,23 +78,23 @@ if strcmp(snap,'max')
     for i = 1:size(starter_marker_lats,2)
         lat = starter_marker_lats(i);
         snap_margin = snap_margins(i);
-        [~,I] = max(data(lat - snap_margin : lat + snap_margin));
+        [~,I] = max(ecg(lat - snap_margin : lat + snap_margin));
         marker_lats_snap(i) = lat - snap_margin - 1 + I;
     end
     marker_times = times(marker_lats_snap);
-    markers = data(marker_lats_snap);
+    markers = ecg(marker_lats_snap);
 elseif strcmp(snap,'min')
     for i = 1:size(starter_marker_lats,2)
         lat = starter_marker_lats(i);
         snap_margin = snap_margins(i);
-        [~,I] = min(data(lat - snap_margin : lat + snap_margin));
+        [~,I] = min(ecg(lat - snap_margin : lat + snap_margin));
         marker_lats_snap(i) = lat - snap_margin - 1 + I;
     end
     marker_times = times(marker_lats_snap);
-    markers = data(marker_lats_snap);
+    markers = ecg(marker_lats_snap);
 else
     marker_times = times(starter_marker_lats);
-    markers = data(starter_marker_lats);
+    markers = ecg(starter_marker_lats);
 end
 
 % Set window starting lims
@@ -134,19 +134,19 @@ setappdata(fig,'markers',markers)
 setappdata(fig,'marker_times_checked',marker_times_checked)
 setappdata(fig,'markers_checked',markers_checked)
 setappdata(fig,'times',times)
-setappdata(fig,'data',data)
+setappdata(fig,'ecg',ecg)
 setappdata(fig,'mark_nhood',mark_nhood)
 setappdata(fig,'snap_nhood',snap_nhood)
-setappdata(fig,'EEG',EEG)
+setappdata(fig,'data',data)
 setappdata(fig,'starter_marker_lats',starter_marker_lats)
 
 % Plot
 figure(fig)
-plot(times(start_margin:start), data(start_margin:start), 'b','HitTest','off')
+plot(times(start_margin:start), ecg(start_margin:start), 'b','HitTest','off')
 hold on
-plot(times(start:finish), data(start:finish),'k','HitTest','off')
+plot(times(start:finish), ecg(start:finish),'k','HitTest','off')
 hold on
-plot(times(finish:finish_margin), data(finish:finish_margin), 'b','HitTest','off')
+plot(times(finish:finish_margin), ecg(finish:finish_margin), 'b','HitTest','off')
 hold on
 marker_mask = marker_times > times(start_margin) & marker_times < times(finish_margin);
 marker_times_win = marker_times(marker_mask);

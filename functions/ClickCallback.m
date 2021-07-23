@@ -15,7 +15,7 @@ start = getappdata(h,'start');
 finish = getappdata(h,'finish');
 finish_margin = getappdata(h,'finish_margin');
 times = getappdata(h,'times');
-data = getappdata(h,'data');
+ecg = getappdata(h,'ecg');
 mark_nhood = getappdata(h,'mark_nhood');
 snap_nhood = getappdata(h,'snap_nhood');
 L_print = getappdata(h,'L_print');
@@ -24,9 +24,9 @@ marker_mask = marker_times > times(start_margin) & marker_times < times(finish_m
 marker_times_win = marker_times(marker_mask);
 markers_win = markers(marker_mask);
 
-% Find closest data-point
+% Find closest ecg-point
 times_win = times(start_margin:finish_margin);
-data_win = data(start_margin:finish_margin);
+data_win = ecg(start_margin:finish_margin);
 factor = (max(data_win)-min(data_win))/(max(times_win)-min(times_win));
 [~,I] = min(((times_win-currtime)*factor).^2+(data_win-currval).^2);
 time = times_win(I);
@@ -73,11 +73,11 @@ end
 % Replot
 figure(h)
 cla(ha)
-plot(times(start_margin:start), data(start_margin:start), 'b','HitTest','off')
+plot(times(start_margin:start), ecg(start_margin:start), 'b','HitTest','off')
 hold on
-plot(times(start:finish), data(start:finish),'k','HitTest','off')
+plot(times(start:finish), ecg(start:finish),'k','HitTest','off')
 hold on
-plot(times(finish:finish_margin), data(finish:finish_margin), 'b','HitTest','off')
+plot(times(finish:finish_margin), ecg(finish:finish_margin), 'b','HitTest','off')
 hold on
 plot(marker_times_win, markers_win,'rx','HitTest','off')
 %     disp(['Adding: [', num2str(time), ', ',num2str(val), ']'])

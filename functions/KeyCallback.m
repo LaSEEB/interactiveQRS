@@ -9,7 +9,7 @@ exit_key = getappdata(h,'exit_key');
 L_hperiod = getappdata(h,'L_hperiod');
 L_margin = getappdata(h,'L_margin');
 times = getappdata(h,'times');
-data = getappdata(h,'data');
+ecg = getappdata(h,'ecg');
 marker_times = getappdata(h,'marker_times');
 markers = getappdata(h,'markers');
 marker_times_checked = getappdata(h,'marker_times_checked');
@@ -57,11 +57,11 @@ switch currkey
         figure(h)
         ha = findall(h,'type','axes','tag','');
         cla(ha)
-        plot(times(start_margin:start), data(start_margin:start), 'b','HitTest','off')
+        plot(times(start_margin:start), ecg(start_margin:start), 'b','HitTest','off')
         hold on
-        plot(times(start:finish), data(start:finish),'k','HitTest','off')
+        plot(times(start:finish), ecg(start:finish),'k','HitTest','off')
         hold on
-        plot(times(finish:finish_margin), data(finish:finish_margin), 'b','HitTest','off')
+        plot(times(finish:finish_margin), ecg(finish:finish_margin), 'b','HitTest','off')
         hold on
         marker_mask = marker_times > times(start_margin) & marker_times < times(finish_margin);
         marker_times_win = marker_times(marker_mask);
@@ -113,11 +113,11 @@ switch currkey
         figure(h)
         ha = findall(h,'type','axes','tag','');
         cla(ha)
-        plot(times(start_margin:start), data(start_margin:start), 'b','HitTest','off')
+        plot(times(start_margin:start), ecg(start_margin:start), 'b','HitTest','off')
         hold on
-        plot(times(start:finish), data(start:finish),'k','HitTest','off')
+        plot(times(start:finish), ecg(start:finish),'k','HitTest','off')
         hold on
-        plot(times(finish:finish_margin), data(finish:finish_margin), 'b','HitTest','off')
+        plot(times(finish:finish_margin), ecg(finish:finish_margin), 'b','HitTest','off')
         hold on
         marker_mask = marker_times > times(start_margin) & marker_times < times(finish_margin);
         marker_times_win = marker_times(marker_mask);
