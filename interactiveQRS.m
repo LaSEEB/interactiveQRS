@@ -4,7 +4,7 @@ function interactiveQRS(data,markers,varargin)
 % window_width: scalar (<4>) (in number of periods to show) 
 % snap:         [] | 'min' | <'max'>
 %
-% E.g.: 1 - add interactiveQRS folder/subfolders to path
+% Eg.: 1 - add interactiveQRS folder/subfolders to path
 %       2 - load('EEG.mat'), load('markers.mat')
 %       3 - interactiveQRS(EEG, markers)
 
