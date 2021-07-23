@@ -1,29 +1,53 @@
-function interactiveQRS(EEG,starter_marker_lats)
+function interactiveQRS(data,markers,varargin)
+% data:         EEGLAB-struct | cell: {vector of points, sampling frequency}
+% markers:      vector | string ('event' to search in struct) | scalar (no markers, just the heart rate)
+% window_width: scalar (<4>) (in number of periods to show) 
+% snap:         [] | 'min' | <'max'>
+%
+% E.g.: 1 - add interactiveQRS folder/subfolders to path
+%       2 - load('EEG.mat'), load('markers.mat')
+%       3 - interactiveQRS(EEG, markers)
 
-% Set constants
-varsbefore = who; % Later, clear variables after this point (except for results)
-chan_ecg = 32;
-times = EEG.times/1000;
-data = EEG.data(chan_ecg,:);
-srate = EEG.srate;
+N_hperiods_show = 4;
+snap = 'max';
 
-% Get heart rate and starter markers (if any)
-switch length(starter_marker_lats)
-    case 0      % Empty
-        hrate_markers = [EEG.event(strcmp('QRS', {EEG.event(:).type})).latency];
-        hrate = 1/mean(diff(times(hrate_markers)));         % in bps
-    case 1      % Value
-        hrate = starter_marker_lats/60;
-        starter_marker_lats = [];
-    otherwise   % Vector
-        hrate = 1/mean(diff(times(starter_marker_lats)));   % in bps
+% Data
+if isstruct(data)
+    EEG = data;
+    srate = EEG.srate;
+    times = EEG.times/1000;
+    data = EEG.data(ismember(upper({EEG.chanlocs(:).labels}),{'ECG','EKG'}),:);
+elseif iscell(data)
+    srate = data{2};
+    data = data{1};
+    times = 0:numel(data)/srate;
 end
 
-disp(['Estimated heart rate: ', num2str(round(hrate*60)), ' bpm'])
+% Markers | heart rate
+if isstring(markers)
+    starter_marker_lats = [EEG.event(strcmp(markers, {EEG.event(:).type})).latency];
+    hrate = 1/mean(diff(times(starter_marker_lats)));
+    fprintf('Estimated heart rate: %d bpm\n',hrate*60)
+elseif isvector(markers)
+    starter_marker_lats = markers(markers<numel(times));
+    hrate = 1/mean(diff(times(starter_marker_lats)));   % in bps
+    fprintf('Estimated heart rate: %d bpm\n',hrate*60)
+elseif isscalar(markers)
+    hrate = markers/60;
+    starter_marker_lats = [];
+end    
+
+% Window width and snap
+if nargin > 2
+    N_hperiods_show = varargin{1};
+    if nargin > 3
+        snap = varargin{2};
+    end
+end
+
 hperiod = 1/hrate;
 
 % Set window constants
-N_hperiods_show = 4;
 N_hperiods_marginshow = 1;
 L_hperiod = round(N_hperiods_show*hperiod*srate);
 L_margin = round(N_hperiods_marginshow*hperiod*srate);
@@ -49,14 +73,29 @@ high_mask = (starter_marker_lats+snap_margins)>L_data;
 snap_margins(low_mask) = starter_marker_lats(low_mask)-1;
 snap_margins(high_mask) = L_data - starter_marker_lats(high_mask);
 marker_lats_snap = zeros(size(starter_marker_lats));
-for i = 1:size(starter_marker_lats,2)
-    lat = starter_marker_lats(i);
-    snap_margin = snap_margins(i);
-    [~,I] = max(data(lat - snap_margin : lat + snap_margin)); % Change to min to snap to valley (e.g. Q)
-    marker_lats_snap(i) = lat - snap_margin - 1 + I;
+
+if strcmp(snap,'max')
+    for i = 1:size(starter_marker_lats,2)
+        lat = starter_marker_lats(i);
+        snap_margin = snap_margins(i);
+        [~,I] = max(data(lat - snap_margin : lat + snap_margin));
+        marker_lats_snap(i) = lat - snap_margin - 1 + I;
+    end
+    marker_times = times(marker_lats_snap);
+    markers = data(marker_lats_snap);
+elseif strcmp(snap,'min')
+    for i = 1:size(starter_marker_lats,2)
+        lat = starter_marker_lats(i);
+        snap_margin = snap_margins(i);
+        [~,I] = min(data(lat - snap_margin : lat + snap_margin));
+        marker_lats_snap(i) = lat - snap_margin - 1 + I;
+    end
+    marker_times = times(marker_lats_snap);
+    markers = data(marker_lats_snap);
+else
+    marker_times = times(starter_marker_lats);
+    markers = data(starter_marker_lats);
 end
-marker_times = times(marker_lats_snap);
-markers = data(marker_lats_snap);
 
 % Set window starting lims
 start_margin = 1;
@@ -66,7 +105,7 @@ finish_margin = L_hperiod+L_margin;
 
 % Set modes
 mode = 'replace'; % replace / remove
-snap = true;
+snap_modes = {'max','min','0'};
 disp(['Mode: ', mode])
 disp(['Snap: ', num2str(snap)])
 
@@ -83,6 +122,7 @@ setappdata(fig,'N_plots',N_plots)
 setappdata(fig,'plot_id',1)
 setappdata(fig,'mode',mode)
 setappdata(fig,'snap',snap)
+setappdata(fig,'snap_modes',snap_modes)
 setappdata(fig,'right_key',right_key)
 setappdata(fig,'left_key',left_key)
 setappdata(fig,'replace_key',replace_key)
@@ -122,12 +162,6 @@ fig.CloseRequestFcn = @CloseCallback;
 ax = findall(fig,'type','axes','tag','');
 ax.ButtonDownFcn = @ClickCallback;
 
-% Clear
-varsafter = [];
-varsnew = [];
-varsafter = who;
-varsnew = setdiff(varsafter, varsbefore);
-clear(varsnew{:})
 end
 
 

@@ -1,4 +1,5 @@
 function CloseCallback(h,~)
+try
 times = getappdata(h,'times');
 data = getappdata(h,'data');
 marker_times = getappdata(h,'marker_times');
@@ -27,8 +28,8 @@ marker_mask = marker_times > times(start_margin) & marker_times < times(finish_m
 disp(num2str(marker_times(marker_mask)))
 
 % Save to workspace
-assignin('base','final_marker_times',marker_times);
-assignin('base','final_markers',markers);
+% assignin('base','final_marker_times',marker_times);
+% assignin('base','final_markers',markers);
 % assignin('base','checked_marker_times',marker_times_checked);
 % assignin('base','checked_markers',markers_checked);
 
@@ -46,7 +47,8 @@ for i = 1:size(EEG.event,2)
     EEG.event(i).urevent = i;
 end
 % Save EEG to workspace
-assignin('base','EEG',EEG);
+% assignin('base','EEG',EEG);
+assignin('caller','EEG',EEG);
 
 if ~isempty(starter_marker_lats)
     [~,dists] = dsearchn(times(starter_marker_lats)', marker_times');
@@ -66,4 +68,9 @@ p2 = plot(marker_times,markers,'xr');
 legend([p2,p1], {'Final markers','Starter markers'})
 
 delete(h)
+
+catch e
+    fprintf(2,'Error in interactiveQRS CloseCallback!:\n%s',e.message);
+    delete(h) 
+end
 end

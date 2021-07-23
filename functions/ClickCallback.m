@@ -43,12 +43,19 @@ switch mode
         markers_win(ismembertol(marker_times_win, time, mark_nhood, 'DataScale',1)) = [];
         marker_times_win(ismembertol(marker_times_win, time, mark_nhood, 'DataScale',1)) = [];
         
-        % Snap to max
-        if snap
+        % Snap
+        if strcmp(snap,'max')
             mask = times_win > (time - snap_nhood / 2) & times_win < (time + snap_nhood / 2);
             data_nhood = data_win(mask);
             times_nhood = times_win(mask);
             [~,I] = max(data_nhood); % Change to min to snap to valley (e.g. Q)
+            time = times_nhood(I);
+            val = data_nhood(I);
+        elseif strcmp(snap,'min')
+            mask = times_win > (time - snap_nhood / 2) & times_win < (time + snap_nhood / 2);
+            data_nhood = data_win(mask);
+            times_nhood = times_win(mask);
+            [~,I] = min(data_nhood); % Change to min to snap to valley (e.g. Q)
             time = times_nhood(I);
             val = data_nhood(I);
         end

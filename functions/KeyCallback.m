@@ -144,8 +144,11 @@ switch currkey
         disp(['Mode: ', 'remove'])
         setappdata(h,'L_print',0);
     case snap_key
-        setappdata(h,'snap',~getappdata(h,'snap'));
-        disp(['Snap: ', num2str(getappdata(h,'snap'))])
+        snap = getappdata(h,'snap');
+        snap_modes = getappdata(h,'snap_modes');
+        snap = snap_modes{rem(find(strcmp(snap,snap_modes))-1+1,numel(snap_modes))+1}; % Toggle between 3 states
+        disp(['Snap: ', snap])
+        setappdata(h,'snap',snap);
         setappdata(h,'L_print',0);
     case exit_key
         % Close figure
