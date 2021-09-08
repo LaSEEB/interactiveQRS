@@ -28,7 +28,7 @@ if isstring(markers)
     starter_marker_lats = [EEG.event(strcmp(markers, {EEG.event(:).type})).latency];
     hrate = 1/mean(diff(times(starter_marker_lats)));
     fprintf('Estimated heart rate: %d bpm\n',hrate*60)
-elseif isvector(markers)
+elseif isvector(markers) && numel(markers) > 1
     starter_marker_lats = markers(markers<numel(times));
     hrate = 1/mean(diff(times(starter_marker_lats)));   % in bps
     fprintf('Estimated heart rate: %d bpm\n',hrate*60)
