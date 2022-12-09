@@ -11,6 +11,7 @@ finish_margin = getappdata(h,'finish_margin');
 data = getappdata(h,'data');
 starter_marker_lats = getappdata(h,'starter_marker_lats');
 mark_nhood = getappdata(h,'mark_nhood');
+verbose = getappdata(h,'verbose');
 
 % Store last window markers
 marker_mask = marker_times > times(start_margin) & marker_times < times(finish_margin);
@@ -25,7 +26,9 @@ setappdata(h,'marker_times_checked',marker_times_checked);
 setappdata(h,'markers_checked',markers_checked);
 
 marker_mask = marker_times > times(start_margin) & marker_times < times(finish_margin);
-disp(num2str(marker_times(marker_mask)))
+if verbose
+    disp(num2str(marker_times(marker_mask)));
+end
 
 % Save to workspace
 % assignin('base','final_marker_times',marker_times);

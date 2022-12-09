@@ -21,6 +21,7 @@ finish_margin = getappdata(h,'finish_margin');
 plot_id = getappdata(h,'plot_id');
 N_plots = getappdata(h,'N_plots');
 L_data = getappdata(h,'L_data');
+verbose = getappdata(h,'verbose');
 
 switch currkey
     case left_key
@@ -68,9 +69,11 @@ switch currkey
         markers_win = markers(marker_mask);
         plot(marker_times_win, markers_win,'rx','HitTest','off')
         
-        print_line = num2str(sort(marker_times_win));
-        fprintf([print_line, '\n'])
-        setappdata(h,'L_print',size(print_line,2)+1);
+        if verbose
+            print_line = num2str(sort(marker_times_win));
+            fprintf([print_line, '\n'])
+            setappdata(h,'L_print',size(print_line,2)+1);
+        end
         
         % Store new lims
         setappdata(h,'start_margin',start_margin)
@@ -124,9 +127,11 @@ switch currkey
         markers_win = markers(marker_mask);
         plot(marker_times_win, markers_win,'rx','HitTest','off')
         
-        print_line = num2str(sort(marker_times_win));
-        fprintf([print_line, '\n'])
-        setappdata(h,'L_print',size(print_line,2)+1);
+        if verbose
+            print_line = num2str(sort(marker_times_win));
+            fprintf([print_line, '\n'])
+            setappdata(h,'L_print',size(print_line,2)+1);
+        end
 
         % Store new lims
         setappdata(h,'start_margin',start_margin)

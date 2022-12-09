@@ -19,6 +19,7 @@ ecg = getappdata(h,'ecg');
 mark_nhood = getappdata(h,'mark_nhood');
 snap_nhood = getappdata(h,'snap_nhood');
 L_print = getappdata(h,'L_print');
+verbose = getappdata(h,'verbose');
 
 marker_mask = marker_times > times(start_margin) & marker_times < times(finish_margin);
 marker_times_win = marker_times(marker_mask);
@@ -91,8 +92,10 @@ setappdata(h,'marker_times',marker_times);
 setappdata(h,'markers',markers);
 % Debug
 % disp(num2str(marker_times_win))
-print_line = num2str(sort(marker_times_win));
-fprintf(repmat('\b',1,L_print));
-fprintf([print_line, '\n'])
-setappdata(h,'L_print',size(print_line,2)+1);
+if verbose
+    print_line = num2str(sort(marker_times_win));
+    fprintf(repmat('\b',1,L_print));
+    fprintf([print_line, '\n'])
+    setappdata(h,'L_print',size(print_line,2)+1);
+end
 end

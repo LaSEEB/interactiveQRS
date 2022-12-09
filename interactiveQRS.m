@@ -1,4 +1,4 @@
-function interactiveQRS(data,markers,varargin)
+function EEG = interactiveQRS(data,markers,varargin)
 % data:         EEGLAB-struct | cell: {vector of points, sampling frequency}
 % markers:      vector | string ('event' to search in struct) | scalar (no markers, just the heart rate)
 % window_width: scalar (<4>) (in number of periods to show) 
@@ -6,17 +6,20 @@ function interactiveQRS(data,markers,varargin)
 %
 % Eg.:  1 - add interactiveQRS folder/subfolders to path
 %       2 - load('EEG.mat'), load('markers.mat')
-%       3 - interactiveQRS(EEG, markers)
+%       3 - EEG = interactiveQRS(EEG, markers);
+% Note: Matlab might underline the output EEG above, warning it might be
+% unset, but it is set when you close the figure, by the function
+% CloseCallback (with the function assignin())
 
-N_hperiods_show = 4;
+N_hperiods_show = 10;
 snap = 'max';
 
 % Data
 if isstruct(data)
-    EEG = data;
-    srate = EEG.srate;
-    times = EEG.times/1000;
-    ecg = EEG.data(ismember(upper({EEG.chanlocs(:).labels}),{'ECG','EKG'}),:);
+    EEGin = data;
+    srate = EEGin.srate;
+    times = EEGin.times/1000;
+    ecg = EEGin.data(ismember(upper({EEGin.chanlocs(:).labels}),{'ECG','EKG'}),:);
 elseif iscell(data)
     ecg = data{1};
     srate = data{2};
@@ -25,7 +28,7 @@ end
 
 % Markers | heart rate
 if isstring(markers)
-    starter_marker_lats = [EEG.event(strcmp(markers, {EEG.event(:).type})).latency];
+    starter_marker_lats = double([EEGin.event(strcmp(markers, {EEGin.event(:).type})).latency]);
     hrate = 1/mean(diff(times(starter_marker_lats)));
     fprintf('Estimated heart rate: %d bpm\n',hrate*60)
 elseif isvector(markers) && numel(markers) > 1
@@ -161,6 +164,8 @@ fig.KeyPressFcn = @KeyCallback;
 fig.CloseRequestFcn = @CloseCallback;
 ax = findall(fig,'type','axes','tag','');
 ax.ButtonDownFcn = @ClickCallback;
+
+waitfor(fig);
 
 end
 
