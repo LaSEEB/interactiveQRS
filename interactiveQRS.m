@@ -13,6 +13,7 @@ function EEG = interactiveQRS(data,markers,varargin)
 
 N_hperiods_show = 10;
 snap = 'max';
+verbose = 0;
 
 % Data
 if isstruct(data)
@@ -142,6 +143,7 @@ setappdata(fig,'mark_nhood',mark_nhood)
 setappdata(fig,'snap_nhood',snap_nhood)
 setappdata(fig,'data',data)
 setappdata(fig,'starter_marker_lats',starter_marker_lats)
+setappdata(fig,'verbose',verbose)
 
 % Plot
 figure(fig)
