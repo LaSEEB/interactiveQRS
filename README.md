@@ -17,7 +17,7 @@ Here are the instructions to interact with the figure:
 - To move to the previous/next window, use left/right or a/d keys.
 - To mark a point, simply click on it. This will also remove any marked point in a small neighbourhood. If you want to just remove a point, press 2 ("Remove mode"). To go back to marking, press 1 ("Replace mode").
 - When a click is made, the closest data point is chosen, and snapped (if snap is enabled). To switch between snapping options, toggle key m.
-- When the marking is done, press Esc or simply close the figure in the top-right x button. This will update EEG.event with the chosen marker positions (latencies), named as 'QRSi'. It will also save the marker times and amplitudes into two variables, final_marker_times and final_markers. Finally, a second figure will appear with the starter and final markers.
+- When the marking is done, close the figure in the top-right x button. This will update EEG.event with the chosen marker positions (latencies), named as 'QRSi'. It will also save the marker times and amplitudes into two variables, final_marker_times and final_markers. Finally, a second figure will appear with the starter and final markers.
 
 Some changes to the code can also be easily made:
 - To change any key, set it in % Set key constants.
