@@ -5,7 +5,7 @@ left_key = getappdata(h,'left_key');
 replace_key = getappdata(h,'replace_key');
 remove_key = getappdata(h,'remove_key');
 snap_key = getappdata(h,'snap_key');
-exit_key = getappdata(h,'exit_key');
+% exit_key = getappdata(h,'exit_key');
 L_hperiod = getappdata(h,'L_hperiod');
 L_margin = getappdata(h,'L_margin');
 times = getappdata(h,'times');
@@ -158,6 +158,5 @@ switch currkey
     case exit_key
         % Close figure
         close(h)
-        assignin('caller','EEG',EEG);
 end
 end
