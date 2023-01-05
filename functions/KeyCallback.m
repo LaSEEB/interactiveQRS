@@ -158,5 +158,6 @@ switch currkey
     case exit_key
         % Close figure
         close(h)
+        assignin('caller','EEG',EEG);
 end
 end
