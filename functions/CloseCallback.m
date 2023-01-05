@@ -56,7 +56,7 @@ if isstruct(data) % EEG
     assignin('caller','EEG',EEG);
 elseif iscell(data) % cell
     data = {data{1}, data{2}, marker_lats};
-    assignin('caller','data',data);
+    assignin('caller','EEG',data);
 end
 
 if ~isempty(starter_marker_lats)
