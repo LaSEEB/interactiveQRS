@@ -155,8 +155,8 @@ switch currkey
         disp(['Snap: ', snap])
         setappdata(h,'snap',snap);
         setappdata(h,'L_print',0);
-    case exit_key
+    % case exit_key
         % Close figure
-        close(h)
+        % close(h)
 end
 end
