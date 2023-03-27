@@ -2,9 +2,9 @@
 A semi-automatic QRS detection algorithm in MATLAB. More generally, a way to interactively mark points in a signal through a moving window.
 
 To use it, either call interactiveQRS.m as:
-- interactiveQRS(data, markers)
-- interactiveQRS(data, heart_rate)
-- interactiveQRS(data, _, window_width, snap)
+- data = interactiveQRS(data, markers);
+- data = interactiveQRS(data, heart_rate);
+- data = interactiveQRS(data, _, window_width, snap);
 
 The first argument is either a EEGLAB struct containing the ECG signal under the channel name "ECG"/"EKG", or a cell containing the ECG (vector) and its sampling frequency (scalar).
 The second argument provides an heart rate (that will determine window width), or an array of previously marked positions (the "starter markers", that could have been previously calculated with e.g. EEGLAB's pop_fmrib_qrsdetect) that will be used to calculate the heart rate and will be shown in the moving window.
