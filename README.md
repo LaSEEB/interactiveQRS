@@ -7,7 +7,7 @@ To use it, either call interactiveQRS.m as:
 - data = interactiveQRS(data, _, window_width, snap);
 
 The first argument is either a EEGLAB struct containing the ECG signal under the channel name "ECG"/"EKG", or a cell containing the ECG (vector) and its sampling frequency (scalar).
-The second argument provides an heart rate (that will determine window width), or an array of previously marked positions (the "starter markers", that could have been previously calculated with e.g. EEGLAB's pop_fmrib_qrsdetect) that will be used to calculate the heart rate and will be shown in the moving window.
+The second argument provides an heart rate (that will determine window width), or an array of previously marked positions (the "starter markers", that could have been previously calculated with e.g. EEGLAB's pop_fmrib_qrsdetect, or deepQRS: https://github.com/LaSEEB/deepQRS) that will be used to calculate the heart rate and will be shown in the moving window.
 The third argument is the number of heart periods to show in the moving window.
 The fourth argument defines wether to snap the starter and selected markers to the maximum ('max') or minimum ('min') of a small neighbourhood, or to not snap at all ('0').
 
